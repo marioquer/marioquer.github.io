@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="开发, 前端, 设计" />
+  <meta name="keywords" content="Laravel,Material Design," />
 
 
 
@@ -90,7 +90,7 @@
 <meta property="og:url" content="http://www.marioquer.cn/2016/07/06/My-New-Post/index.html">
 <meta property="og:site_name" content="marioquer">
 <meta property="og:description" content="由Hexo驱动的blog，记录开发活动，前端，设计和有关生活的东西">
-<meta property="og:updated_time" content="2016-07-05T16:16:34.000Z">
+<meta property="og:updated_time" content="2016-10-26T10:26:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="My New Post">
 <meta name="twitter:description" content="由Hexo驱动的blog，记录开发活动，前端，设计和有关生活的东西">
@@ -207,9 +207,19 @@
         <li class="menu-item menu-item-links">
           <a href="/links" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-link"></i> <br />
             
             menu.links
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-inbox"></i> <br />
+            
+            menu.guestbook
           </a>
         </li>
       
@@ -220,16 +230,6 @@
               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
             
             關於
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-guestbook">
-          <a href="/guestbook" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
-            
-            menu.guestbook
           </a>
         </li>
       
@@ -289,6 +289,25 @@
           </span>
 
           
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/开发小记/" itemprop="url" rel="index">
+                    <span itemprop="name">开发小记</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
 
           
             
@@ -329,6 +348,14 @@
     </div>
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Laravel/" rel="tag">#Laravel</a>
+          
+            <a href="/tags/Material-Design/" rel="tag">#Material Design</a>
+          
+        </div>
       
 
       
@@ -415,7 +442,21 @@
           </div>
 
           
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分類</span>
+              </a>
+            </div>
+          
 
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">標籤</span>
+              </a>
+            </div>
           
 
         </nav>
