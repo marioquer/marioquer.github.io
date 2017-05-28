@@ -337,26 +337,12 @@
 
       
         
-          
-            <p>最近随着课程的开展终于开始了Android的学习，算是接触移动开发的一个开端吧，和web前端开发类似，移动开发除了前端页面、逻辑层数据层的编写，还有一个不容忽视的关键操作——网络请求。在学习Google与Udacity官方提供的Android教程时，循序渐进的练习引出了UI Thread的概念，以及网络连接必须单独开一个线程以防阻塞主线程的进行，Google教程中给出的为<strong>AsyncTask泛型类</strong>的实现，而学校课程中老师给的示例代码中用到了Java编程中常用的<strong>Thread类</strong>加以实现，此处给出两者的分析和区别。</p>
-<h2 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h2><h3 id="AsyncTask"><a href="#AsyncTask" class="headerlink" title="AsyncTask\"></a>AsyncTask\<params,progress,result\></params,progress,result\></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">getListTask</span> <span class="keyword">extends</span> <span class="title">AsyncTask</span>&lt;<span class="title">URL</span>, <span class="title">Void</span>, <span class="title">String</span>&gt; </span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> String <span class="title">doInBackground</span><span class="params">(URL... params)</span> </span>&#123;</span><br><span class="line">            URL url = params[<span class="number">0</span>];</span><br><span class="line">            String st = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                st = NetworkUtil.getResponseFromHttpUrl(url);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> st;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPostExecute</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (s != <span class="keyword">null</span> &amp;&amp; !s.equals(<span class="string">""</span>)) &#123;</span><br><span class="line">                textView.setText(s);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>AsyncTask是一个泛型类，传入的构造参数中Params，Progress和Result分别为:交互的参数、进行中需要与主线程进行通信的数据类型以及线程结束后返回的数据类型。此处为一个发送http请求的功能，中途不需要和UI主线程发生交互，因此参数列表为<code>&lt;URL,Void,String&gt;</code>。</p>
-<h3 id="Thread"><a href="#Thread" class="headerlink" title="Thread"></a>Thread</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="comment">//TODO</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br></pre></td></tr></table></figure>
-<p>Java中标准的通过新建Runable类的方式新建一个新的线程。</p>
-<h2 id="AsyncTask详解"><a href="#AsyncTask详解" class="headerlink" title="AsyncTask详解"></a>AsyncTask详解</h2><h3 id="基本方法"><a href="#基本方法" class="headerlink" title="基本方法"></a>基本方法</h3><p>AsyncTask必须在UI主线程中新建和实例化，需要显式调用的方法只有<code>execute()</code>方法，其他都在线程执行过程中由AsyncTask类自行调用，并且调用的方法分为在UI主线程运行的以及子线程运行的，内部通过<strong>Handler与UI主线程进行交互</strong>，内部则使用<strong>ThreadPoolExectutor类</strong>进行线程池的调度和管理。对线程的管理和调度更为可控。</p>
-<img src="/2017/05/28/Android中的AsyncTask和Thread/1.png" alt="AsyncTask协作流程图" title="AsyncTask协作流程图">
-<p>主线程中的方法主要有：</p>
-<ul>
-<li>execute()</li>
-<li>onProgressUpdate()</li>
-<li>onPreExecute()</li>
-<li>onPostExecute()</li>
-</ul>
-<p>而后台线程运行的主要方法体在<code>doInBackground()</code>中</p>
-<h3 id="源码块分析"><a href="#源码块分析" class="headerlink" title="源码块分析"></a>源码块分析</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CPU_COUNT = Runtime.getRuntime().availableProcessors();</span><br><span class="line">    <span class="comment">// We want at least 2 threads and at most 4 threads in the core pool,</span></span><br><span class="line">    <span class="comment">// preferring to have 1 less than the CPU count to avoid saturating</span></span><br><span class="line">    <span class="comment">// the CPU with background work</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CORE_POOL_SIZE = Math.max(<span class="number">2</span>, Math.min(CPU_COUNT - <span class="number">1</span>, <span class="number">4</span>));</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAXIMUM_POOL_SIZE = CPU_COUNT * <span class="number">2</span> + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> KEEP_ALIVE_SECONDS = <span class="number">30</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ThreadFactory sThreadFactory = <span class="keyword">new</span> ThreadFactory() &#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">final</span> AtomicInteger mCount = <span class="keyword">new</span> AtomicInteger(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Thread <span class="title">newThread</span><span class="params">(Runnable r)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> Thread(r, <span class="string">"AsyncTask #"</span> + mCount.getAndIncrement());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> BlockingQueue&lt;Runnable&gt; sPoolWorkQueue =</span><br><span class="line">            <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;(<span class="number">128</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * An &#123;<span class="doctag">@link</span> Executor&#125; that can be used to execute tasks in parallel.</span><br><span class="line">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Executor THREAD_POOL_EXECUTOR;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        ThreadPoolExecutor threadPoolExecutor = <span class="keyword">new</span> ThreadPoolExecutor(</span><br><span class="line">                CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_SECONDS, TimeUnit.SECONDS,</span><br><span class="line">                sPoolWorkQueue, sThreadFactory);</span><br><span class="line">        threadPoolExecutor.allowCoreThreadTimeOut(<span class="keyword">true</span>);</span><br><span class="line">        THREAD_POOL_EXECUTOR = threadPoolExecutor;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@MainThread</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> AsyncTask&lt;Params, Progress, Result&gt; <span class="title">execute</span><span class="params">(Params... params)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> executeOnExecutor(sDefaultExecutor, params);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line"><span class="meta">@MainThread</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> AsyncTask&lt;Params, Progress, Result&gt; <span class="title">executeOnExecutor</span><span class="params">(Executor exec,</span><br><span class="line">            Params... params)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (mStatus != Status.PENDING) &#123;</span><br><span class="line">            <span class="keyword">switch</span> (mStatus) &#123;</span><br><span class="line">                <span class="keyword">case</span> RUNNING:</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Cannot execute task:"</span></span><br><span class="line">                            + <span class="string">" the task is already running."</span>);</span><br><span class="line">                <span class="keyword">case</span> FINISHED:</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Cannot execute task:"</span></span><br><span class="line">                            + <span class="string">" the task has already been executed "</span></span><br><span class="line">                            + <span class="string">"(a task can be executed only once)"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        mStatus = Status.RUNNING;</span><br><span class="line"></span><br><span class="line">        onPreExecute();</span><br><span class="line"></span><br><span class="line">        mWorker.mParams = params;</span><br><span class="line">        exec.execute(mFuture);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>可以看到内部初始化局部变量时新建了static的ThreadPoolExecutor以及其他的变量，作用域范围是属于类的，类的属性的作用范围是CLASSPATH，因为一个进程一个VM，所以是AsyncTask控制着进程范围内所有的子类实例。具体的Handler和相关的线程调度在这就不进行讲解了…后续继续…</p>
-
-          
+          <p>最近随着课程的开展终于开始了Android的学习，算是接触移动开发的一个开端吧，和web前端开发类似，移动开发除了前端页面、逻辑层数据层的编写，还有一个不容忽视的关键操作——网络请求。在学习Google与Udacity官方提供的Android教程时，循序渐进的练习引出了UI Thread的概念，以及网络连接必须单独开一个线程以防阻塞主线程的进行，Google教程中给出的为<strong>AsyncTask泛型类</strong>的实现，而学校课程中老师给的示例代码中用到了Java编程中常用的<strong>Thread类</strong>加以实现，此处给出两者的分析和区别。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2017/05/28/Android中的AsyncTask和Thread/#more" rel="contents">
+              閱讀全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -482,40 +468,12 @@
 
       
         
-          
-            <p>前段时间偶然间听说摩根士丹利开放了Summer Intern的申请，本着对C++之父Bjarne Stroustrup的敬畏，申请了该项目。这个项目分为两个track，Application Development和Enterprise Engineering，一开始也并不能很好的理解两者的区别，因而官方建议没有明确意愿的可以都选，后期可以再次经过调整。</p>
-<h2 id="笔试"><a href="#笔试" class="headerlink" title="笔试"></a>笔试</h2><p>摩根士丹利的笔试和国内互联网企业的风格不太一样，使用的是国外的一款在线测评软件，总共有五套题目供选择，Java Development、C++ Development、Cyber Security、Perl/Python Development以及System Engineering，在deadline之前只需完成至少一套就可以了，最终会以最高的一套题目分数为准。比较有意思的是，这款在线测评会根据你的实时正确错误情况，调整题目的难度，题目都是选择题，所以会出现一道很难的题目然后随即就是一道很弱智的读代码题…大概就是上面一道题做错了…<br>我只选择了Java Development套题进行笔试，题目涵盖JVM的知识以及语言知识，还包括了一些面向对象的概念性和应用型题目，范围与其他笔试并不太大差异</p>
-<h2 id="电话面试"><a href="#电话面试" class="headerlink" title="电话面试"></a>电话面试</h2><p>从电话面试开始，将都是全英文面试，因而最重要的应该还是能够进行正常有效的交流，能将自己想要表达的表达清楚，面试正式开始时，也应证了我这一点看法，和腾讯电面相比，问题的深度比较浅，比较考验表达能力。根据回忆，大概整理出了以下的问题列表：</p>
-<ul>
-<li>introduction of yourself, which area are you good at? —— I say front-end development</li>
-<li>tell something about front-end framework</li>
-<li>how hash table works, how do you find a value in a hash table, differences between hashtable and hashmap in Java?</li>
-<li>describe stack &amp; queue</li>
-<li>describe binary search tree and how it works</li>
-<li>differences and effects between left join and right join in database</li>
-<li>describe the utilization of index in database</li>
-<li>design a systematic solution to subway system using any language you like</li>
-<li>…</li>
-</ul>
-<p>问题主要还是涵盖了最基础的数据结构、数据库以及对系统层面的设计，最后一题会要求你在给出一定的宏观设计的前提下，问到一些细节性的设计，例如某些现实数据你会使用何种数据结构进行组织，你会怎么组织这些模块间的协作，简单描述一下在一个常见的场景下面，你设计的这个系统如何进行协作。总的来看，电话面试作为笔试后的第一次面试，而且是英文面试，还是比较侧重综合基础以及表达能力。</p>
-<h2 id="上海终面"><a href="#上海终面" class="headerlink" title="上海终面"></a>上海终面</h2><p>最后一场面试是在上海摩根士丹利进行，公司氛围和传统互联网企业的年轻欢快不太相同，比较沉稳严肃。时长共为三小时，一小时的code test，以及两轮技术官的二对一的单独面试。</p>
-<h3 id="code-test"><a href="#code-test" class="headerlink" title="code test"></a>code test</h3><p>首先会给出一个form给自己的各方面技术技能打分，后面的面试将会针对这个form以及code test向你提问。code test此次的题目是一个存储和查询公司员工部门的需求，需要</p>
-<ol>
-<li>构建一个数据结构存储表格数据</li>
-<li>构建一个查询该数据结构中数据的函数</li>
-<li>若某字段还有另一树状继承关系，重新修改查询和输出函数</li>
-</ol>
-<p>可以使用任意熟悉的语言，手写清晰正确的代码</p>
-<h3 id="第一轮单独面试"><a href="#第一轮单独面试" class="headerlink" title="第一轮单独面试"></a>第一轮单独面试</h3><p>第一轮主要看了code test的结果，进行了检查和让我解释一下思路，有些bug解决了之后没啥问题了就进行下一个环节了。然后就是对照着自己给技能点的打分提问，这时候就体现出打分要慎重…打高了会让你说自己了解到什么程度，以及有什么相关的经验，比较机智的做法是尽量往自己做过的项目上扯，比较能够说出来东西，纯知识性的回答可能会出现车祸…</p>
-<h3 id="第二轮单独面试"><a href="#第二轮单独面试" class="headerlink" title="第二轮单独面试"></a>第二轮单独面试</h3><p>第二轮运气比较好，面试官比较和蔼亲和，介绍了两个track的区别并让我选取了一个比较感兴趣的，我选了Application Development，是和金融业务需求开发相关的track，于是接下来面试官开始问我数学问题了…但也不是特别难，主要看反应能力和思维思考的过程吧…</p>
-<ul>
-<li>靶子上有一个每秒可以向8个方向移动一格的物体，你瞄准开枪到命中靶子需要两秒（此时物体已经移动了两格），问射哪个格子命中物体的概率最大，是多少？</li>
-<li>给出根号10的2位小数表示…嗯…列了一个一元一次方程估算了一下就出来了…</li>
-</ul>
-<p>然后这两个问题就把时间花光了…主要是第一个问题扯皮了比较久…互相解释互相扯皮…于是没有进行到将这思路改写成代码的阶段，但看面试官的态度还可以…应该是还ok吧…😂</p>
-<p>整场申请面试过程感受下来，还是能体现出一个非纯互联网公司技术岗的风格，各自有各自的侧重点和需求吧。</p>
-
-          
+          <p>前段时间偶然间听说摩根士丹利开放了Summer Intern的申请，本着对C++之父Bjarne Stroustrup的敬畏，申请了该项目。这个项目分为两个track，Application Development和Enterprise Engineering，一开始也并不能很好的理解两者的区别，因而官方建议没有明确意愿的可以都选，后期可以再次经过调整。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2017/05/26/摩根士丹利面试哇/#more" rel="contents">
+              閱讀全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -641,52 +599,12 @@
 
       
         
-          
-            <p>家在深圳，所以对在鹅厂工作也是一早就憧憬的事情。自己前两天在院里做的大作业和项目基本上也都集中在前端开发，可能自己还是比较喜欢所见即所得的技术方向吧，在鹅厂学长帮助下，也投起了简历准备起了面试。</p>
-<h2 id="简历准备"><a href="#简历准备" class="headerlink" title="简历准备"></a>简历准备</h2><p>一开始参考网上的简历模板，找了好看的AI模板，保留了项目经历、个人简介、技能点评分以及教育经历等项目，自认为在美观度上还是格式上都比较好，然而询问学长学姐后仍发现许多问题以及需要改进的地方：</p>
-<ul>
-<li>项目经历应该以时间倒序排列，最近做的项目排在最前面</li>
-<li>和应聘岗位无太大关系的职责和经历需要删除或修改，尽量往目标岗位靠，<strong>需展现专业性，而非多样性</strong></li>
-<li>项目经历部分着重写自己在项目中起到的不可或缺的作用，强调贡献</li>
-<li>技能点评分不直观，最好对自己的语言技能加以文字描述，例如：能熟练使用XXX框架开发XXX……</li>
-</ul>
-<p>简历的编写保障了能过简历筛选这一关，准备的过程也是在揣摩HR行为和心理的过程，换位思考也很重要，HR优先想筛选的人，是<strong>技术过硬、岗位契合度高、能够直接上岗搬砖</strong>的，因此技术岗的简历能够最大程度展现自己的技术能力以及岗位契合度最重要。</p>
-<h2 id="面试"><a href="#面试" class="headerlink" title="面试"></a>面试</h2><p>内推面试经历了两次，一次电话面，一次视频面。两次面试内容风格不太一致，电话面试主要问到的有数据结构、网络、操作系统、数据库的一些基础知识，以及前端开发上的一些基础知识和了解性知识。</p>
-<h3 id="电话面试"><a href="#电话面试" class="headerlink" title="电话面试"></a>电话面试</h3><p>因为一开始有整理可能的面试题目，所以大部分还是能够答得出来，但是讲道理应该当时找个地方可以边打电话边看整理资料的，这样也能在功利性上最大程度保证面试质量。被问到的问题涵盖基础知识为主：</p>
-<ul>
-<li>排序和搜索的算法(平衡二叉树、B树等)</li>
-<li>CSS的选择器和伪类</li>
-<li>跨域访问的方式</li>
-<li>web优化的常用手段</li>
-<li>HTTP请求中缓存的字段？</li>
-<li>状态码描述，502,503,400??</li>
-<li>TCP的握手</li>
-<li>ping和telnet的区别</li>
-<li>GET和POST的区别</li>
-<li>JVM的内存怎么管理的</li>
-<li>数据库的性能优化？？</li>
-<li>常见的网络攻击有哪些，怎么预防</li>
-<li>ES6的一些特性</li>
-<li>有没有关注一些开源的项目，以及更新的动向</li>
-<li>Node.js 的架构有没有了解</li>
-<li>能不能说几种设计模式</li>
-<li>session在服务器端是怎么识别客户端机的</li>
-<li>……</li>
-</ul>
-<h3 id="视频面试"><a href="#视频面试" class="headerlink" title="视频面试"></a>视频面试</h3><p>面试我的是一个MIG的技术主管，比较和善，相比于电话面试，视频面试还是比较紧张的，面试形式也较为随意，没有电话面试那么程式化，主要询问了一些关于做过的项目的内容，后半部分又问回了基础知识，后来问他的时候他说问基础知识是看看再学校有没有认真学习，大概……在校生的那点技术经验比较水吧，还是看态度和进取心和学习能力为主，大概的问题列表如下：</p>
-<ul>
-<li>排序算法</li>
-<li>搜索算法</li>
-<li>网络的七层模型</li>
-<li>操作系统调度</li>
-<li>说一个最能体现技术的项目，最困难的地方是什么</li>
-<li>一个字符串，统计各字符的数目的算法有哪些</li>
-<li>TCP协议的三次握手以及传输控制的内容</li>
-<li>……</li>
-</ul>
-<h2 id="反思"><a href="#反思" class="headerlink" title="反思"></a>反思</h2><p>说实话，面试两场下来发现应聘也就是考察基础知识的掌握程度和学习能力，以及在该岗位领域的热情和对新技术的了解。还是需要加强基础知识的巩固和完善，多刷题，多背诵😂</p>
-
-          
+          <p>家在深圳，所以对在鹅厂工作也是一早就憧憬的事情。自己前两天在院里做的大作业和项目基本上也都集中在前端开发，可能自己还是比较喜欢所见即所得的技术方向吧，在鹅厂学长帮助下，也投起了简历准备起了面试。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2017/05/13/鹅厂前端面试哇/#more" rel="contents">
+              閱讀全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
