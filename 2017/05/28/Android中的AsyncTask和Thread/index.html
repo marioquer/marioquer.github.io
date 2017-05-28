@@ -96,12 +96,12 @@
 <meta property="og:url" content="http://www.marioquer.cn/2017/05/28/Android中的AsyncTask和Thread/index.html">
 <meta property="og:site_name" content="marioquer">
 <meta property="og:description" content="最近随着课程的开展终于开始了Android的学习，算是接触移动开发的一个开端吧，和web前端开发类似，移动开发除了前端页面、逻辑层数据层的编写，还有一个不容忽视的关键操作——网络请求。在学习Google与Udacity官方提供的Android教程时，循序渐进的练习引出了UI Thread的概念，以及网络连接必须单独开一个线程以防阻塞主线程的进行，Google教程中给出的为AsyncTask泛型类的">
-<meta property="og:image" content="http://www.marioquer.cn/1.png">
-<meta property="og:updated_time" content="2017-05-28T07:40:13.000Z">
+<meta property="og:image" content="http://www.marioquer.cn/2017/05/28/Android中的AsyncTask和Thread/1.png">
+<meta property="og:updated_time" content="2017-05-28T07:45:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android中的AsyncTask和Thread">
 <meta name="twitter:description" content="最近随着课程的开展终于开始了Android的学习，算是接触移动开发的一个开端吧，和web前端开发类似，移动开发除了前端页面、逻辑层数据层的编写，还有一个不容忽视的关键操作——网络请求。在学习Google与Udacity官方提供的Android教程时，循序渐进的练习引出了UI Thread的概念，以及网络连接必须单独开一个线程以防阻塞主线程的进行，Google教程中给出的为AsyncTask泛型类的">
-<meta name="twitter:image" content="http://www.marioquer.cn/1.png">
+<meta name="twitter:image" content="http://www.marioquer.cn/2017/05/28/Android中的AsyncTask和Thread/1.png">
 
 
 
@@ -340,7 +340,7 @@
 <h3 id="Thread"><a href="#Thread" class="headerlink" title="Thread"></a>Thread</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="comment">//TODO</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br></pre></td></tr></table></figure>
 <p>Java中标准的通过新建Runable类的方式新建一个新的线程。</p>
 <h2 id="AsyncTask详解"><a href="#AsyncTask详解" class="headerlink" title="AsyncTask详解"></a>AsyncTask详解</h2><h3 id="基本方法"><a href="#基本方法" class="headerlink" title="基本方法"></a>基本方法</h3><p>AsyncTask必须在UI主线程中新建和实例化，需要显式调用的方法只有<code>execute()</code>方法，其他都在线程执行过程中由AsyncTask类自行调用，并且调用的方法分为在UI主线程运行的以及子线程运行的，内部通过<strong>Handler与UI主线程进行交互</strong>，内部则使用<strong>ThreadPoolExectutor类</strong>进行线程池的调度和管理。对线程的管理和调度更为可控。</p>
-<p><img src="1.png" alt=""></p>
+<img src="/2017/05/28/Android中的AsyncTask和Thread/1.png" alt="AsyncTask协作流程图" title="AsyncTask协作流程图">
 <p>主线程中的方法主要有：</p>
 <ul>
 <li>execute()</li>
