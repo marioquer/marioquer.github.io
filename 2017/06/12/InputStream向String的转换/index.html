@@ -1,0 +1,825 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Exo 2:300,300italic,400,400italic,700,700italic|Righteous:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,Java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="在Android开发中，基于REST风格的接口开发也非常地常见。
+Web开发中，其基于浏览器的请求响应过程，是js或是html表单或是地址链接向后端发出http请求，获得的response中的数据流可以直接进行渲染展示。
+而Android中则是相当于Java编写的前端逻辑向Java编写的后端接口发送http请求。因此需要建立HttpURLConnection对象，建立请求并获得响应之后，以Inpu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="InputStream向String的转换">
+<meta property="og:url" content="http://www.marioquer.cn/2017/06/12/InputStream向String的转换/index.html">
+<meta property="og:site_name" content="marioquer">
+<meta property="og:description" content="在Android开发中，基于REST风格的接口开发也非常地常见。
+Web开发中，其基于浏览器的请求响应过程，是js或是html表单或是地址链接向后端发出http请求，获得的response中的数据流可以直接进行渲染展示。
+而Android中则是相当于Java编写的前端逻辑向Java编写的后端接口发送http请求。因此需要建立HttpURLConnection对象，建立请求并获得响应之后，以Inpu">
+<meta property="og:image" content="http://www.marioquer.cn/2017/06/12/InputStream向String的转换/14972849618288.jpg">
+<meta property="og:image" content="http://www.marioquer.cn/2017/06/12/InputStream向String的转换/14972853862763.jpg">
+<meta property="og:image" content="http://www.marioquer.cn/2017/06/12/InputStream向String的转换/14972855244141.jpg">
+<meta property="og:image" content="http://www.marioquer.cn/2017/06/12/InputStream向String的转换/14972855558685.jpg">
+<meta property="og:updated_time" content="2017-06-12T16:43:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="InputStream向String的转换">
+<meta name="twitter:description" content="在Android开发中，基于REST风格的接口开发也非常地常见。
+Web开发中，其基于浏览器的请求响应过程，是js或是html表单或是地址链接向后端发出http请求，获得的response中的数据流可以直接进行渲染展示。
+而Android中则是相当于Java编写的前端逻辑向Java编写的后端接口发送http请求。因此需要建立HttpURLConnection对象，建立请求并获得响应之后，以Inpu">
+<meta name="twitter:image" content="http://www.marioquer.cn/2017/06/12/InputStream向String的转换/14972849618288.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> InputStream向String的转换 | marioquer </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-hk">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">marioquer</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">时荒之纪的战士</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分類
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            歸檔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            標籤
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            關於
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                InputStream向String的转换
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">發表於</span>
+            <time itemprop="dateCreated" datetime="2017-06-12T23:59:50+08:00" content="2017-06-12">
+              2017-06-12
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/编程应用/" itemprop="url" rel="index">
+                    <span itemprop="name">编程应用</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/06/12/InputStream向String的转换/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/06/12/InputStream向String的转换/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/06/12/InputStream向String的转换/" class="leancloud_visitors" data-flag-title="InputStream向String的转换">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">閱讀次數 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在Android开发中，基于REST风格的接口开发也非常地常见。</p>
+<p>Web开发中，其基于浏览器的请求响应过程，是js或是html表单或是地址链接向后端发出http请求，获得的response中的数据流可以直接进行渲染展示。</p>
+<p>而Android中则是相当于Java编写的前端逻辑向Java编写的后端接口发送http请求。因此需要建立HttpURLConnection对象，建立请求并获得响应之后，以InputStream的形式获得response数据流，其中则面临将InputStream转成便于Java处理的String类型的问题。</p>
+<a id="more"></a>
+<p>##Android中Http请求响应例子<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getResponseFromHttpUrl</span><span class="params">(URL url)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        HttpURLConnection connection = (HttpURLConnection) url.openConnection();</span><br><span class="line"></span><br><span class="line">		<span class="comment">//Scanner的操作可以将请求包中的内容进行分隔并转成UTF-16</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            InputStream in = connection.getInputStream();</span><br><span class="line">            Scanner scanner = <span class="keyword">new</span> Scanner(in);</span><br><span class="line">            scanner.useDelimiter(<span class="string">"\\A"</span>);</span><br><span class="line">            <span class="keyword">boolean</span> hasInput = scanner.hasNext();</span><br><span class="line">            <span class="keyword">if</span> (hasInput) &#123;</span><br><span class="line">                <span class="keyword">return</span> scanner.next();</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            connection.disconnect();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>其中的解决方案是Android官方教学视频中推荐的转换方式，利用了分隔符“\A”将InputStream中所有字符一并获取。此方法仅使用到了Java的标准库（Scanner库），以下还有其他方法及对比。</p>
+<p>##方案列举<br>1.使用 <code>IOUtils.toString (Apache Utils)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String result = IOUtils.toString(inputStream, StandardCharsets.UTF_8);</span><br></pre></td></tr></table></figure>
+<p>2.使用 <code>CharStreams (guava)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String result = CharStreams.toString(<span class="keyword">new</span> InputStreamReader(</span><br><span class="line">      inputStream, Charsets.UTF_8));</span><br></pre></td></tr></table></figure>
+<p>3.使用 <code>Scanner（JDK）</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Scanner s = <span class="keyword">new</span> Scanner(inputStream).useDelimiter(<span class="string">"\\A"</span>);</span><br><span class="line">String result = s.hasNext() ? s.next() : <span class="string">""</span>;</span><br></pre></td></tr></table></figure>
+<p>4.使用 <code>Stream Api (Java 8)</code> 注意：<code>此方法将换行符\r\n转换成\n</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String result = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(inputStream))</span><br><span class="line">  .lines().collect(Collectors.joining(<span class="string">"\n"</span>));</span><br></pre></td></tr></table></figure>
+<p>5.使用 <code>parallel Stream Api (Java 8)</code> 注意：<code>此方法将换行符\r\n转换成\n</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String result = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(inputStream)).lines()</span><br><span class="line">   .parallel().collect(Collectors.joining(<span class="string">"\n"</span>));</span><br></pre></td></tr></table></figure>
+<p>6.使用 <code>InputStreamReader</code> 和 <code>StringBuilder (JDK)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="keyword">int</span> bufferSize = <span class="number">1024</span>;</span><br><span class="line"><span class="keyword">final</span> <span class="keyword">char</span>[] buffer = <span class="keyword">new</span> <span class="keyword">char</span>[bufferSize];</span><br><span class="line"><span class="keyword">final</span> StringBuilder out = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">Reader in = <span class="keyword">new</span> InputStreamReader(inputStream, <span class="string">"UTF-8"</span>);</span><br><span class="line"><span class="keyword">for</span> (; ; ) &#123;</span><br><span class="line">    <span class="keyword">int</span> rsz = in.read(buffer, <span class="number">0</span>, buffer.length);</span><br><span class="line">    <span class="keyword">if</span> (rsz &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    out.append(buffer, <span class="number">0</span>, rsz);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> out.toString();</span><br></pre></td></tr></table></figure>
+<p>7.使用 <code>StringWriter</code> 和 <code>IOUtils.copy (Apache Commons)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">StringWriter writer = <span class="keyword">new</span> StringWriter();</span><br><span class="line">IOUtils.copy(inputStream, writer, <span class="string">"UTF-8"</span>);</span><br><span class="line"><span class="keyword">return</span> writer.toString();</span><br></pre></td></tr></table></figure>
+<p>8.使用 <code>ByteArrayOutputStream</code> 和 <code>inputStream.read (JDK)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ByteArrayOutputStream result = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line"><span class="keyword">byte</span>[] buffer = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line"><span class="keyword">int</span> length;</span><br><span class="line"><span class="keyword">while</span> ((length = inputStream.read(buffer)) != -<span class="number">1</span>) &#123;</span><br><span class="line">    result.write(buffer, <span class="number">0</span>, length);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// StandardCharsets.UTF_8.name() &gt; JDK 7</span></span><br><span class="line"><span class="keyword">return</span> result.toString(<span class="string">"UTF-8"</span>);</span><br></pre></td></tr></table></figure>
+<p>9.使用 <code>BufferedReader (JDK)</code> 注意：<code>此方法将换行符\r\n转换成因系统而异的换行符</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">String newLine = System.getProperty(<span class="string">"line.separator"</span>);</span><br><span class="line">BufferedReader reader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(inputStream));</span><br><span class="line">StringBuilder result = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">String line; <span class="keyword">boolean</span> flag = <span class="keyword">false</span>;</span><br><span class="line"><span class="keyword">while</span> ((line = reader.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">    result.append(flag? newLine: <span class="string">""</span>).append(line);</span><br><span class="line">    flag = <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> result.toString();</span><br></pre></td></tr></table></figure>
+<p>10.使用 <code>BufferedInputStream</code> 和 <code>ByteArrayOutputStream (JDK)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">BufferedInputStream bis = <span class="keyword">new</span> BufferedInputStream(inputStream);</span><br><span class="line">ByteArrayOutputStream buf = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line"><span class="keyword">int</span> result = bis.read();</span><br><span class="line"><span class="keyword">while</span>(result != -<span class="number">1</span>) &#123;</span><br><span class="line">    buf.write((<span class="keyword">byte</span>) result);</span><br><span class="line">    result = bis.read();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// StandardCharsets.UTF_8.name() &gt; JDK 7</span></span><br><span class="line"><span class="keyword">return</span> buf.toString(<span class="string">"UTF-8"</span>);</span><br></pre></td></tr></table></figure>
+<p>11.使用 <code>inputStream.read()</code> 和 <code>StringBuilder (JDK)</code> 注意：此方法不适用于Unicode编码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> ch;</span><br><span class="line">StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line"><span class="keyword">while</span>((ch = inputStream.read()) != -<span class="number">1</span>)</span><br><span class="line">    sb.append((<span class="keyword">char</span>)ch);</span><br><span class="line">reset();</span><br><span class="line"><span class="keyword">return</span> sb.toString();</span><br></pre></td></tr></table></figure>
+<p>##性能评测<br>借用stackflow上的性能评测</p>
+<blockquote>
+<p>Performance tests for small String (length = 175), url in github (mode = Average Time, system = Linux, score 1,343 is the best):</p>
+</blockquote>
+<img src="/2017/06/12/InputStream向String的转换/14972849618288.jpg" alt="14972849618288.jpg" title="">
+<blockquote>
+<p>Performance tests for big String (length = 50100), url in github (mode = Average Time, system = Linux, score 200,715 is the best):</p>
+</blockquote>
+<img src="/2017/06/12/InputStream向String的转换/14972853862763.jpg" alt="14972853862763.jpg" title="">
+<img src="/2017/06/12/InputStream向String的转换/14972855244141.jpg" alt="14972855244141.jpg" title="">
+<blockquote>
+<p>Performance test (Average Time) depending on Input Stream length in Windows 7 system:</p>
+</blockquote>
+<img src="/2017/06/12/InputStream向String的转换/14972855558685.jpg" alt="14972855558685.jpg" title="">
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag">#Android</a>
+          
+            <a href="/tags/Java/" rel="tag">#Java</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/28/Android中的AsyncTask和Thread/" rel="next" title="Android中的AsyncTask和Thread">
+                <i class="fa fa-chevron-left"></i> Android中的AsyncTask和Thread
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/mario.jpg"
+               alt="Mario Que" />
+          <p class="site-author-name" itemprop="name">Mario Que</p>
+          <p class="site-description motion-element" itemprop="description">阙用于记录对前端，设计以及生活的思考</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">文章</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分類</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">標籤</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/marioquer" target="_blank" title="github" rel="external nofollow">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2058806884/home?wvr=5&lf=reg" target="_blank" title="weibo" rel="external nofollow">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:marioquer@hotmail.com" target="_blank" title="mail" rel="external nofollow">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  mail
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目錄</p>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mario Que</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io" rel="external nofollow">Hexo</a> 強力驅動
+</div>
+
+<div class="theme-info">
+  主題 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next" rel="external nofollow">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'marioquer';
+      var disqus_identifier = '2017/06/12/InputStream向String的转换/';
+      var disqus_title = 'InputStream向String的转换';
+      var disqus_url = 'http://www.marioquer.cn/2017/06/12/InputStream向String的转换/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("nrdoMD1BsqE3DVeO22y5pFxh-gzGzoHsz", "vvaniJ4fpo8utAsvr0I4rn5i");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+</body>
+</html>
