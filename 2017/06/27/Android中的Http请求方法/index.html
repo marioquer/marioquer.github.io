@@ -1,0 +1,776 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Exo 2:300,300italic,400,400italic,700,700italic|Righteous:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,Java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Android中越来越多基于RESTful风格的Api进行开发，和Web以及其他端的Api接口共用也显得十分重要，本文将集合安卓中发送Http请求的若干种方法，包括原生的JDK和Apache支持的请求方法以及第三方实现的网络请求框架的使用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android中的Http请求方法">
+<meta property="og:url" content="http://www.marioquer.cn/2017/06/27/Android中的Http请求方法/index.html">
+<meta property="og:site_name" content="marioquer">
+<meta property="og:description" content="Android中越来越多基于RESTful风格的Api进行开发，和Web以及其他端的Api接口共用也显得十分重要，本文将集合安卓中发送Http请求的若干种方法，包括原生的JDK和Apache支持的请求方法以及第三方实现的网络请求框架的使用。">
+<meta property="og:updated_time" content="2017-06-27T04:27:38.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android中的Http请求方法">
+<meta name="twitter:description" content="Android中越来越多基于RESTful风格的Api进行开发，和Web以及其他端的Api接口共用也显得十分重要，本文将集合安卓中发送Http请求的若干种方法，包括原生的JDK和Apache支持的请求方法以及第三方实现的网络请求框架的使用。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Android中的Http请求方法 | marioquer </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-hk">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">marioquer</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">时荒之纪的战士</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分類
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            歸檔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            標籤
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            關於
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android中的Http请求方法
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">發表於</span>
+            <time itemprop="dateCreated" datetime="2017-06-27T11:52:52+08:00" content="2017-06-27">
+              2017-06-27
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/编程应用/" itemprop="url" rel="index">
+                    <span itemprop="name">编程应用</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/06/27/Android中的Http请求方法/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/06/27/Android中的Http请求方法/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/06/27/Android中的Http请求方法/" class="leancloud_visitors" data-flag-title="Android中的Http请求方法">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">閱讀次數 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Android中越来越多基于RESTful风格的Api进行开发，和Web以及其他端的Api接口共用也显得十分重要，本文将集合安卓中发送Http请求的若干种方法，包括原生的JDK和Apache支持的请求方法以及第三方实现的网络请求框架的使用。</p>
+<a id="more"></a>
+<h2 id="使用HttpURLConnection访问"><a href="#使用HttpURLConnection访问" class="headerlink" title="使用HttpURLConnection访问"></a>使用HttpURLConnection访问</h2><h3 id="GET请求"><a href="#GET请求" class="headerlink" title="GET请求"></a>GET请求</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">httpGet</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		String result = <span class="keyword">null</span>;</span><br><span class="line">		URL url = <span class="keyword">null</span>;</span><br><span class="line">		HttpURLConnection connection = <span class="keyword">null</span>;</span><br><span class="line">		InputStreamReader in = <span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			url = <span class="keyword">new</span> URL(<span class="string">"http://yourUrl"</span>);</span><br><span class="line">			connection = (HttpURLConnection) url.openConnection();</span><br><span class="line">			in = <span class="keyword">new</span> InputStreamReader(connection.getInputStream());</span><br><span class="line">			BufferedReader bufferedReader = <span class="keyword">new</span> BufferedReader(in);</span><br><span class="line">			StringBuffer strBuffer = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">			String line = <span class="keyword">null</span>;</span><br><span class="line">			<span class="keyword">while</span> ((line = bufferedReader.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">				strBuffer.append(line);</span><br><span class="line">			&#125;</span><br><span class="line">			result = strBuffer.toString();</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">			<span class="keyword">if</span> (connection != <span class="keyword">null</span>) &#123;</span><br><span class="line">				connection.disconnect();</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (in != <span class="keyword">null</span>) &#123;</span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					in.close();</span><br><span class="line">				&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">					e.printStackTrace();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> result;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>此方法使用了JDK自带的HttpUrlConnection类，注意此处的url不能使用localhost和127.0.0.1，会直接访问到安卓运行的模拟器，而非你的本地PC。</p>
+<h3 id="POST请求"><a href="#POST请求" class="headerlink" title="POST请求"></a>POST请求</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">httpPost</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		String result = <span class="keyword">null</span>;</span><br><span class="line">		URL url = <span class="keyword">null</span>;</span><br><span class="line">		HttpURLConnection connection = <span class="keyword">null</span>;</span><br><span class="line">		InputStreamReader in = <span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			url = <span class="keyword">new</span> URL(<span class="string">"http://yourUrl"</span>);</span><br><span class="line">			connection = (HttpURLConnection) url.openConnection();</span><br><span class="line">			connection.setDoInput(<span class="keyword">true</span>);</span><br><span class="line">			connection.setDoOutput(<span class="keyword">true</span>);</span><br><span class="line">			connection.setRequestMethod(<span class="string">"POST"</span>);</span><br><span class="line">			connection.setRequestProperty(<span class="string">"Content-Type"</span>, <span class="string">"application/x-www-form-urlencoded"</span>);</span><br><span class="line">			connection.setRequestProperty(<span class="string">"Charset"</span>, <span class="string">"utf-8"</span>);</span><br><span class="line">			DataOutputStream dop = <span class="keyword">new</span> DataOutputStream(</span><br><span class="line">					connection.getOutputStream());</span><br><span class="line">			dop.writeBytes(<span class="string">"token=xxx"</span>);</span><br><span class="line">			dop.flush();</span><br><span class="line">			dop.close();</span><br><span class="line"></span><br><span class="line">			in = <span class="keyword">new</span> InputStreamReader(connection.getInputStream());</span><br><span class="line">			BufferedReader bufferedReader = <span class="keyword">new</span> BufferedReader(in);</span><br><span class="line">			StringBuffer strBuffer = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">			String line = <span class="keyword">null</span>;</span><br><span class="line">			<span class="keyword">while</span> ((line = bufferedReader.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">				strBuffer.append(line);</span><br><span class="line">			&#125;</span><br><span class="line">			result = strBuffer.toString();</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">			<span class="keyword">if</span> (connection != <span class="keyword">null</span>) &#123;</span><br><span class="line">				connection.disconnect();</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (in != <span class="keyword">null</span>) &#123;</span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					in.close();</span><br><span class="line">				&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">					e.printStackTrace();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> result;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>如果参数中有中文编码，则需要将字符流编码设置为UTF-8<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">URLEncoder.encode(<span class="string">"测试"</span>,<span class="string">"utf-8"</span>)</span><br><span class="line">URLDecoder.decode(<span class="string">"测试"</span>,<span class="string">"utf-8"</span>);</span><br></pre></td></tr></table></figure></p>
+<h2 id="使用Apache的HttpClient访问"><a href="#使用Apache的HttpClient访问" class="headerlink" title="使用Apache的HttpClient访问"></a>使用Apache的HttpClient访问</h2><h3 id="GET请求-1"><a href="#GET请求-1" class="headerlink" title="GET请求"></a>GET请求</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">httpGet</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		String result = <span class="keyword">null</span>;</span><br><span class="line">		BufferedReader reader = <span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			HttpClient client = <span class="keyword">new</span> DefaultHttpClient();</span><br><span class="line">			HttpGet request = <span class="keyword">new</span> HttpGet();</span><br><span class="line">			request.setURI(<span class="keyword">new</span> URI(</span><br><span class="line">					<span class="string">"yourUrl"</span>));</span><br><span class="line">			HttpResponse response = client.execute(request);</span><br><span class="line">			reader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(response</span><br><span class="line">					.getEntity().getContent()));</span><br><span class="line"></span><br><span class="line">			StringBuffer strBuffer = <span class="keyword">new</span> StringBuffer(<span class="string">""</span>);</span><br><span class="line">			String line = <span class="keyword">null</span>;</span><br><span class="line">			<span class="keyword">while</span> ((line = reader.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">				strBuffer.append(line);</span><br><span class="line">			&#125;</span><br><span class="line">			result = strBuffer.toString();</span><br><span class="line"></span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">			<span class="keyword">if</span> (reader != <span class="keyword">null</span>) &#123;</span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					reader.close();</span><br><span class="line">					reader = <span class="keyword">null</span>;</span><br><span class="line">				&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">					e.printStackTrace();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> result;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="POST请求-1"><a href="#POST请求-1" class="headerlink" title="POST请求"></a>POST请求</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">httpPost</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		String result = <span class="keyword">null</span>;</span><br><span class="line">		BufferedReader reader = <span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			HttpClient client = <span class="keyword">new</span> DefaultHttpClient();</span><br><span class="line">			HttpPost request = <span class="keyword">new</span> HttpPost();</span><br><span class="line">			request.setURI(<span class="keyword">new</span> URI(<span class="string">"yourUrl"</span>));</span><br><span class="line">			List&lt;NameValuePair&gt; postParameters = <span class="keyword">new</span> ArrayList&lt;NameValuePair&gt;();</span><br><span class="line">			postParameters.add(<span class="keyword">new</span> BasicNameValuePair(<span class="string">"token"</span>, <span class="string">"xxx"</span>));</span><br><span class="line">			UrlEncodedFormEntity formEntity = <span class="keyword">new</span> UrlEncodedFormEntity(</span><br><span class="line">					postParameters);</span><br><span class="line">			request.setEntity(formEntity);</span><br><span class="line"></span><br><span class="line">			HttpResponse response = client.execute(request);</span><br><span class="line">			reader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(response</span><br><span class="line">					.getEntity().getContent()));</span><br><span class="line"></span><br><span class="line">			StringBuffer strBuffer = <span class="keyword">new</span> StringBuffer(<span class="string">""</span>);</span><br><span class="line">			String line = <span class="keyword">null</span>;</span><br><span class="line">			<span class="keyword">while</span> ((line = reader.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">				strBuffer.append(line);</span><br><span class="line">			&#125;</span><br><span class="line">			result = strBuffer.toString();</span><br><span class="line"></span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">			<span class="keyword">if</span> (reader != <span class="keyword">null</span>) &#123;</span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					reader.close();</span><br><span class="line">					reader = <span class="keyword">null</span>;</span><br><span class="line">				&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">					e.printStackTrace();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> result;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="使用okHttp访问"><a href="#使用okHttp访问" class="headerlink" title="使用okHttp访问"></a>使用okHttp访问</h2><p>OkHttp 处理了很多网络疑难杂症：会从很多常用的连接问题中自动恢复。如果您的服务器配置了多个IP地址，当第一个IP连接失败的时候，OkHttp会自动尝试下一个IP。OkHttp还处理了代理服务器问题和SSL握手失败问题。<br>使用 OkHttp 无需重写您程序中的网络代码。OkHttp实现了几乎和java.net.HttpURLConnection一样的API。如果你用了 Apache HttpClient，则OkHttp也提供了一个对应的okhttp-apache 模块。</p>
+<h3 id="GET请求-2"><a href="#GET请求-2" class="headerlink" title="GET请求"></a>GET请求</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">OkHttpClient client = <span class="keyword">new</span> OkHttpClient();</span><br><span class="line"> </span><br><span class="line"><span class="function">String <span class="title">run</span><span class="params">(String url)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    Request request = <span class="keyword">new</span> Request.Builder().url(url).build();</span><br><span class="line">    Response response = client.newCall(request).execute();    </span><br><span class="line">    <span class="keyword">if</span> (response.isSuccessful()) &#123;        </span><br><span class="line">        <span class="keyword">return</span> response.body().string();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;        </span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IOException(<span class="string">"Unexpected code "</span> + response);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="POST请求-2"><a href="#POST请求-2" class="headerlink" title="POST请求"></a>POST请求</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Json作为参数</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> MediaType JSON = MediaType.parse(<span class="string">"application/json; charset=utf-8"</span>);</span><br><span class="line">OkHttpClient client = <span class="keyword">new</span> OkHttpClient();</span><br><span class="line"><span class="function">String <span class="title">post</span><span class="params">(String url, String json)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">     RequestBody body = RequestBody.create(JSON, json);</span><br><span class="line">      Request request = <span class="keyword">new</span> Request.Builder()</span><br><span class="line">      .url(url)</span><br><span class="line">      .post(body)</span><br><span class="line">      .build();</span><br><span class="line">      Response response = client.newCall(request).execute();</span><br><span class="line">    f (response.isSuccessful()) &#123;</span><br><span class="line">        <span class="keyword">return</span> response.body().string();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IOException(<span class="string">"Unexpected code "</span> + response);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//键值对作为参数</span></span><br><span class="line">OkHttpClient client = <span class="keyword">new</span> OkHttpClient();</span><br><span class="line"><span class="function">String <span class="title">post</span><span class="params">(String url, String json)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"> </span><br><span class="line">     RequestBody formBody = <span class="keyword">new</span> FormEncodingBuilder()</span><br><span class="line">    .add(<span class="string">"platform"</span>, <span class="string">"android"</span>)</span><br><span class="line">    .add(<span class="string">"name"</span>, <span class="string">"bug"</span>)</span><br><span class="line">    .add(<span class="string">"subject"</span>, <span class="string">"XXXXXXXXXXXXXXX"</span>)</span><br><span class="line">    .build();</span><br><span class="line"> </span><br><span class="line">      Request request = <span class="keyword">new</span> Request.Builder()</span><br><span class="line">      .url(url)</span><br><span class="line">      .post(body)</span><br><span class="line">      .build();</span><br><span class="line"> </span><br><span class="line">      Response response = client.newCall(request).execute();</span><br><span class="line">    <span class="keyword">if</span> (response.isSuccessful()) &#123;</span><br><span class="line">        <span class="keyword">return</span> response.body().string();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IOException(<span class="string">"Unexpected code "</span> + response);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="使用Retrofit开源框架"><a href="#使用Retrofit开源框架" class="headerlink" title="使用Retrofit开源框架"></a>使用Retrofit开源框架</h2><p>Retrofit和Java领域的ORM概念类似， ORM把结构化数据转换为Java对象，而Retrofit 把REST API返回的数据转化为Java对象方便操作。同时还封装了网络代码的调用。<br>Retrofit框架包含了后端API接口的实现以及前端的调用，是一个完整的Java网络请求框架，和上述几种方法均不同。</p>
+<h3 id="Api接口与调用"><a href="#Api接口与调用" class="headerlink" title="Api接口与调用"></a>Api接口与调用</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">GitHubService</span> </span>&#123;</span><br><span class="line">  <span class="meta">@GET</span>(<span class="string">"users/&#123;user&#125;/repos"</span>)</span><br><span class="line">  Call&lt;List&lt;Repo&gt;&gt; listRepos(<span class="meta">@Path</span>(<span class="string">"user"</span>) String user);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用注解定义Url，baseUrl则是在构建service时，作为参数传入<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Retrofit retrofit = <span class="keyword">new</span> Retrofit.Builder()</span><br><span class="line">    .baseUrl(<span class="string">"https://api.github.com/"</span>)</span><br><span class="line">    .build();</span><br><span class="line"></span><br><span class="line">GitHubService service = retrofit.create(GitHubService.class);</span><br></pre></td></tr></table></figure></p>
+<p>然后service调用实际的Java方法，来触发Http请求<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Call&lt;List&lt;Repo&gt;&gt; repos = service.listRepos(<span class="string">"octocat"</span>);</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag">#Android</a>
+          
+            <a href="/tags/Java/" rel="tag">#Java</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/12/InputStream向String的转换/" rel="next" title="InputStream向String的转换">
+                <i class="fa fa-chevron-left"></i> InputStream向String的转换
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/mario.jpg"
+               alt="Mario Que" />
+          <p class="site-author-name" itemprop="name">Mario Que</p>
+          <p class="site-description motion-element" itemprop="description">阙用于记录对前端，设计以及生活的思考</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">文章</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分類</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">標籤</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/marioquer" target="_blank" title="github" rel="external nofollow">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2058806884/home?wvr=5&lf=reg" target="_blank" title="weibo" rel="external nofollow">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:marioquer@hotmail.com" target="_blank" title="mail" rel="external nofollow">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  mail
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用HttpURLConnection访问"><span class="nav-number">1.</span> <span class="nav-text">使用HttpURLConnection访问</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GET请求"><span class="nav-number">1.1.</span> <span class="nav-text">GET请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#POST请求"><span class="nav-number">1.2.</span> <span class="nav-text">POST请求</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Apache的HttpClient访问"><span class="nav-number">2.</span> <span class="nav-text">使用Apache的HttpClient访问</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GET请求-1"><span class="nav-number">2.1.</span> <span class="nav-text">GET请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#POST请求-1"><span class="nav-number">2.2.</span> <span class="nav-text">POST请求</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用okHttp访问"><span class="nav-number">3.</span> <span class="nav-text">使用okHttp访问</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GET请求-2"><span class="nav-number">3.1.</span> <span class="nav-text">GET请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#POST请求-2"><span class="nav-number">3.2.</span> <span class="nav-text">POST请求</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Retrofit开源框架"><span class="nav-number">4.</span> <span class="nav-text">使用Retrofit开源框架</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Api接口与调用"><span class="nav-number">4.1.</span> <span class="nav-text">Api接口与调用</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mario Que</span>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'marioquer';
+      var disqus_identifier = '2017/06/27/Android中的Http请求方法/';
+      var disqus_title = 'Android中的Http请求方法';
+      var disqus_url = 'http://www.marioquer.cn/2017/06/27/Android中的Http请求方法/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("nrdoMD1BsqE3DVeO22y5pFxh-gzGzoHsz", "vvaniJ4fpo8utAsvr0I4rn5i");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+</body>
+</html>
